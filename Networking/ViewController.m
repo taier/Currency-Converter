@@ -9,16 +9,16 @@
 #import "ViewController.h"
 
 @interface ViewController ()
-@property (weak, nonatomic) IBOutlet UITextField *LVLField;
-@property (weak, nonatomic) IBOutlet UILabel *ResultFiled;
-@property (weak, nonatomic) IBOutlet UIPickerView *FromCurrency;
-@property (weak, nonatomic) IBOutlet UIPickerView *toCurrencyPicker;
+@property (weak, nonatomic) IBOutlet UITextField    *LVLField;
+@property (weak, nonatomic) IBOutlet UILabel        *ResultFiled;
+@property (weak, nonatomic) IBOutlet UIPickerView   *FromCurrency;
+@property (weak, nonatomic) IBOutlet UIPickerView   *toCurrencyPicker;
 
 @property (strong,nonatomic) NSMutableArray *currencyArray;
 @property (strong,nonatomic) NSMutableArray *toCurrencyArray;
-@property (strong,nonatomic) NSString *fromCurren;
-@property (strong,nonatomic) NSString *toCurrency;
-@property (strong,nonatomic) NSMutableData *receivedData;
+@property (strong,nonatomic) NSString       *fromCurren;
+@property (strong,nonatomic) NSString       *toCurrency;
+@property (strong,nonatomic) NSMutableData  *receivedData;
 
 
 - (IBAction)randomButton:(UIButton *)sender;
@@ -86,30 +86,28 @@
         [alert show];
     }
     else  {
+        amount = [NSString stringWithFormat:@"http://rate-exchange.appspot.com/currency?from=%@&to=%@&q=%@",_fromCurren,_toCurrency,amount];
     
-    amount = [NSString stringWithFormat:@"http://rate-exchange.appspot.com/currency?from=%@&to=%@&q=%@",_fromCurren,_toCurrency,amount];
-    
-    NSURL *url = [NSURL URLWithString:amount];
-    
-    NSData *tmpData = [NSData dataWithContentsOfURL:url];
+        NSURL *url = [NSURL URLWithString:amount];
+        NSData *tmpData = [NSData dataWithContentsOfURL:url];
         
         UIAlertView *alert = [[UIAlertView alloc]initWithTitle: @"Sorry :("
                                                        message: @"Can't finde currency rate!"
                                                       delegate: self
                                              cancelButtonTitle:@"OKaaay"
                                              otherButtonTitles:nil];
-    if(!tmpData) {
-        [alert show];
-    }
-    else {
-            NSError *err;
-            NSDictionary *json = [NSJSONSerialization JSONObjectWithData:tmpData
-                                                     options:NSJSONReadingAllowFragments error:&err];
-            NSLog(@"JSON %@", json);
-            NSNumber *num = [json objectForKey:@"v"];
-                if(!num)  [alert show];
-            self.ResultFiled.text = [NSString stringWithFormat:@"%f", [num floatValue]];
+        if(!tmpData) {
+            [alert show];
         }
+            else {
+                NSError *err;
+                NSDictionary *json = [NSJSONSerialization JSONObjectWithData:tmpData
+                                                     options:NSJSONReadingAllowFragments error:&err];
+                NSLog(@"JSON %@", json);
+                NSNumber *num = [json objectForKey:@"v"];
+                    if(!num)  [alert show];
+                        self.ResultFiled.text = [NSString stringWithFormat:@"%f", [num floatValue]];
+            }
     }
 }
 
@@ -167,7 +165,8 @@
         // receivedData is an instance variable declared elsewhere.
         _receivedData = [NSMutableData data];
         NSLog(@"Data recived");
-    } else {
+    }
+    else {
         UIAlertView *alert = [[UIAlertView alloc]initWithTitle: @"Sorry :("
                                                        message: @"Can't finde a connection"
                                                       delegate: self
